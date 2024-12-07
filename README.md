@@ -90,16 +90,16 @@ Ensure you have the following installed:
 ## Folder Structure 📂
 
 ```
-notes-app/
+finals/
 ├── public/
 ├── src/
 │   ├── components/
-│   │   ├── AddNote.js
-│   │   ├── Header.js
-│   │   ├── Notes.js
-│   │   ├── NotesList.js
-│   │   ├── Search.js
-│   ├── App.js
+│   │   ├── AddNote.jsx
+│   │   ├── Header.jsx
+│   │   ├── Notes.jsx
+│   │   ├── NotesList.jsx
+│   │   ├── Search.jsx
+│   ├── App.jsx
 │   ├── index.js
 │   ├── styles.css
 ├── README.md
