@@ -19,6 +19,7 @@ This app is built with modern web technologies including React, Tailwind CSS, an
 
    - Create notes with a character limit of 200.
    - Assign a category to notes or create a new category dynamically.
+   - Assign a priority to notes (High, Medium, Low).
 
 2. **Search Notes:**
 
@@ -115,6 +116,7 @@ finals/
 2. Enter the note text and either:
    - Select an existing category.
    - Add a new category.
+   - select a priority.
 3. Save the note by clicking the save icon.
 
 ### Searching Notes 🔍

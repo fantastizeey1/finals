@@ -110,3 +110,9 @@ textarea:focus {
 .search input:focus {
   outline: none;
 }
+.priority-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.75rem;
+  font-weight: bold;
+}

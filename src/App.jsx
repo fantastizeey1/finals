@@ -15,28 +15,34 @@ const App = () => {
           text: "Learn React",
           date: new Date().toLocaleDateString(),
           category: "Programming",
+          priority: "High",
         },
         {
           id: nanoid(),
           text: "Buy groceries",
           date: new Date().toLocaleDateString(),
           category: "Personal",
+          priority: "medium",
         },
         {
           id: nanoid(),
           text: "Plan vacation",
           date: new Date().toLocaleDateString(),
           category: "Travel",
+          priority: "Low",
         },
         {
           id: nanoid(),
           text: "Read a new book",
           date: new Date().toLocaleDateString(),
           category: "Hobby",
+          priority: "High",
         },
       ]
     );
   });
+
+  const [selectedPriority, setSelectedPriority] = useState("All");
 
   const [darkMode, setDarkMode] = useState(() => {
     // Load dark mode preference from localStorage
@@ -73,13 +79,14 @@ const App = () => {
     }
   }, [darkMode]);
 
-  const addNote = (text, category) => {
+  const addNote = (text, category, priority) => {
     const date = new Date();
     const newNote = {
       id: nanoid(),
       text,
       date: date.toLocaleDateString(),
       category,
+      priority,
     };
     setNotes((prevNotes) => [...prevNotes, newNote]);
 
@@ -100,7 +107,9 @@ const App = () => {
       .includes(searchText.toLowerCase());
     const matchesCategory =
       selectedCategory === "All" || note.category === selectedCategory;
-    return matchesText && matchesCategory;
+    const matchesPriority =
+      selectedPriority === "All" || note.priority === selectedPriority;
+    return matchesText && matchesCategory && matchesPriority;
   });
 
   return (
@@ -112,23 +121,40 @@ const App = () => {
       <div className="container mx-auto p-4">
         <Header handleToggleDarkMode={setDarkMode} />
         <Search handleSearchNote={setSearchText} />
-        <div className="mb-4">
-          <label htmlFor="category" className="block mb-2 font-semibold">
-            Filter by Category:
-          </label>
-          <select
-            id="category"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600"
-          >
-            <option value="All">All</option>
-            {existingCategories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
+        <div className="flex justify-center items-center gap-5 flex-row">
+          <div className="my-4">
+            <label htmlFor="category" className="block mb-2 font-semibold">
+              Filter by Category:
+            </label>
+            <select
+              id="category"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600"
+            >
+              <option value="All">All</option>
+              {existingCategories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className=" my-4">
+            <label htmlFor="category" className="block mb-2 font-semibold">
+              Filter by Priority:
+            </label>
+            <select
+              value={selectedPriority}
+              onChange={(e) => setSelectedPriority(e.target.value)}
+              className="w-full p-2 border rounded-md bg-white dark:bg-gray-700 dark:border-gray-600"
+            >
+              <option value="All">All Priorities</option>
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
         </div>
         <NotesList
           notes={filteredNotes}

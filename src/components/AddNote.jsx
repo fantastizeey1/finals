@@ -1,78 +1,129 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { FaSave } from "react-icons/fa";
 
 const AddNote = ({ handleAddNote, existingCategories = [] }) => {
-  const [noteText, setNoteText] = useState("");
+  const [noteContent, setNoteContent] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [newCategory, setNewCategory] = useState("");
+  const [priority, setPriority] = useState("Medium");
   const characterLimit = 200;
 
-  const handleChange = (event) => {
-    if (characterLimit - event.target.value.length >= 0) {
-      setNoteText(event.target.value);
+  // Handle Speech-to-Text
+  const handleSpeechInput = () => {
+    if (!("webkitSpeechRecognition" in window)) {
+      alert("Speech recognition is not supported in this browser.");
+      return;
     }
+
+    const recognition = new window.webkitSpeechRecognition();
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => setIsRecording(true);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setNoteContent((prevContent) => prevContent + " " + transcript);
+    };
+    recognition.onend = () => setIsRecording(false);
+
+    recognition.start();
   };
 
+  // Save Note
   const handleSaveClick = () => {
     if (
-      noteText.trim().length > 0 &&
+      noteContent.trim().length > 0 &&
       (selectedCategory || newCategory.trim())
     ) {
       const category = newCategory.trim() || selectedCategory;
-      handleAddNote(noteText, category);
-      setNoteText("");
+      handleAddNote(noteContent, category, priority);
+      setNoteContent("");
       setSelectedCategory("");
       setNewCategory("");
+      setPriority("Medium");
     }
   };
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-lg shadow-lg transition duration-300 flex flex-col space-y-4">
-      {/* Text Area */}
-      <textarea
-        rows="4"
-        placeholder="Type your note here..."
-        className="w-full bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={noteText}
-        onChange={handleChange}
-      ></textarea>
+    <div className="bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-lg shadow-lg transition duration-300 flex flex-col space-y-6 fixed inset-2 md:inset-x-[25%] inset-y-[10%] bg-opacity-80 z-10 md:w-[50%] h-[80%] md:h-[80%]">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="font-bold text-lg">Add Note</h2>
+      </div>
 
-      {/* Category Selection */}
-      <div className="flex flex-col  gap-3">
-        {/* Existing Categories Dropdown */}
-        <select
-          className="flex-1 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={selectedCategory}
-          onChange={(e) => {
-            setSelectedCategory(e.target.value);
-            setNewCategory(""); // Clear new category if an existing one is selected
-          }}
-        >
-          <option value="">Select a Category</option>
-          {existingCategories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+      {/* Form Section */}
+      <div className="flex flex-col h-[70%] md:flex-row gap-6">
+        {/* Note Input */}
+        <div className="flex-1 h-[70%] mb-8 lg:mb-10">
+          <ReactQuill
+            theme="snow"
+            value={noteContent}
+            onChange={setNoteContent}
+            placeholder="Write your note here..."
+            className=" h-full md:h-64 "
+          />
+        </div>
 
-        {/* Add New Category */}
-        <input
-          type="text"
-          className="flex-1 p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Or add a new category"
-          value={newCategory}
-          onChange={(e) => {
-            setNewCategory(e.target.value);
-            setSelectedCategory(""); // Clear existing category if a new one is being typed
-          }}
-        />
+        {/* Category and Priority */}
+        <div className="flex-1 flex flex-col gap-4">
+          {/* Existing Categories Dropdown */}
+          <select
+            className="w-full p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            value={selectedCategory}
+            onChange={(e) => {
+              setSelectedCategory(e.target.value);
+              setNewCategory(""); // Clear new category if an existing one is selected
+            }}
+          >
+            <option value="">Select a Category</option>
+            {existingCategories.map((category) => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+
+          {/* Add New Category */}
+          <input
+            type="text"
+            className="w-full p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Or add a new category"
+            value={newCategory}
+            onChange={(e) => {
+              setNewCategory(e.target.value);
+              setSelectedCategory(""); // Clear existing category if a new one is being typed
+            }}
+          />
+
+          {/* Priority Selector */}
+          <select
+            value={priority}
+            onChange={(e) => setPriority(e.target.value)}
+            className="w-full p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
       </div>
 
       {/* Footer */}
       <div className="flex justify-between items-center">
+        <button
+          className={`px-4 py-2 ${
+            isRecording
+              ? "bg-red-500 hover:bg-red-600"
+              : "bg-gray-500 hover:bg-gray-800"
+          } text-white rounded`}
+          onClick={handleSpeechInput}
+        >
+          {isRecording ? "Listening..." : "Voice Input"}
+        </button>
         <small className="text-gray-500 dark:text-gray-400">
-          {characterLimit - noteText.length} Remaining
+          {characterLimit - noteContent.length} Remaining
         </small>
         <button
           onClick={handleSaveClick}
