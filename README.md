@@ -8,6 +8,9 @@ The **Notes App** is a responsive React application designed for creating, organ
 - Categorize notes dynamically.
 - Toggle between light and dark themes.
 - Persist notes and theme settings using `localStorage`.
+- Use text-to-speech for reading notes aloud.
+- Write rich-text notes with advanced formatting using ReactQuill.
+- Receive instant feedback with React Toast notifications.
 
 This app is built with modern web technologies including React, Tailwind CSS, and utilizes `localStorage` for data persistence.
 
@@ -20,6 +23,7 @@ This app is built with modern web technologies including React, Tailwind CSS, an
    - Create notes with a character limit of 200.
    - Assign a category to notes or create a new category dynamically.
    - Assign a priority to notes (High, Medium, Low).
+   - Write notes with rich-text formatting using **ReactQuill**.
 
 2. **Search Notes:**
 
@@ -34,7 +38,15 @@ This app is built with modern web technologies including React, Tailwind CSS, an
    - Toggle between light and dark themes.
    - The selected theme persists across sessions.
 
-5. **Persistent Data:**
+5. **Speech-to-Text Integration:**
+
+   - Use a built-in **speech-to-text** feature to dictate notes directly.
+
+6. **React Toast Notifications:**
+
+   - Get instant feedback for actions like adding or deleting notes.
+
+7. **Persistent Data:**
    - Notes and theme preferences are stored in `localStorage` to ensure they remain available after page reloads.
 
 ---
@@ -43,7 +55,10 @@ This app is built with modern web technologies including React, Tailwind CSS, an
 
 - **Frontend:** React (with hooks for state management)
 - **Styling:** Tailwind CSS
+- **Rich Text Editor:** ReactQuill
+- **Notifications:** React Toastify
 - **Icons:** React Icons
+- **Speech-to-Text:** Web Speech API
 - **User ID:** nanoid
 - **Data Storage:** `localStorage`
 
@@ -110,26 +125,29 @@ finals/
 
 ## Usage Instructions 📋
 
-### Adding Notes 📝
+### Adding Notes 🖍️
 
 1. Click the **Add Note** button.
-2. Enter the note text and either:
-   - Select an existing category.
-   - Add a new category.
-   - select a priority.
-3. Save the note by clicking the save icon.
+2. Enter the note text using the rich-text editor.
+3. Assign a category or create a new one.
+4. Select a priority.
+5. Save the note by clicking the save icon.
 
 ### Searching Notes 🔍
 
 - Type keywords in the search bar to filter notes by text.
 
-### Filtering Notes by Category 🗂️
+### Filtering Notes by Category 📂️
 
 - Use the category dropdown menu to display notes belonging to a specific category.
 
-### Dark Mode Toggle 🌗
+### Dark Mode Toggle 🌇
 
 - Click the theme toggle icon in the header to switch between light and dark themes.
+
+### Dictating Notes 🎤
+
+- Use the **Speech-to-Text** feature to convert spoken words into note content.
 
 ---
 
@@ -166,8 +184,11 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## Acknowledgements 🙌
+## Acknowledgements 🙏
 
 - [React](https://reactjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
+- [ReactQuill](https://github.com/zenoamaro/react-quill)
+- [React Toastify](https://github.com/fkhadra/react-toastify)
 - [React Icons](https://react-icons.github.io/react-icons/)
+- [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)

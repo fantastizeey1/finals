@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { FaSave } from "react-icons/fa";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const AddNote = ({ handleAddNote, existingCategories = [] }) => {
+const AddNote = ({ handleAddNote, existingCategories = [], onClose }) => {
   const [noteContent, setNoteContent] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -33,23 +35,48 @@ const AddNote = ({ handleAddNote, existingCategories = [] }) => {
 
   // Save Note
   const handleSaveClick = () => {
-    if (
-      noteContent.trim().length > 0 &&
-      (selectedCategory || newCategory.trim())
-    ) {
-      const category = newCategory.trim() || selectedCategory;
-      handleAddNote(noteContent, category, priority);
-      setNoteContent("");
-      setSelectedCategory("");
-      setNewCategory("");
-      setPriority("Medium");
+    if (!noteContent.trim()) {
+      toast.error("Note content is required!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
     }
+
+    if (!selectedCategory && !newCategory.trim()) {
+      toast.error("Category is required!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const category = newCategory.trim() || selectedCategory;
+
+    handleAddNote(noteContent, category, priority);
+
+    // Clear form
+    setNoteContent("");
+    setSelectedCategory("");
+    setNewCategory("");
+    setPriority("Medium");
+
+    toast.success("Note added successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    // Close the popup
+    onClose();
   };
 
   return (
-    <div className="bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-lg shadow-lg transition duration-300 flex flex-col space-y-6 fixed inset-2 md:inset-x-[25%] inset-y-[10%] bg-opacity-80 z-10 md:w-[50%] h-[80%] md:h-[80%]">
+    <div className="bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white p-4 rounded-lg shadow-lg transition duration-300 flex flex-col space-y-6 fixed inset-2 md:inset-x-[25%] inset-y-[6%] bg-opacity-80 z-10 md:w-[50%] h-[90%] md:h-[80%]">
+      {/* Toast Container */}
+      <ToastContainer />
+
       {/* Header */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
         <h2 className="font-bold text-lg">Add Note</h2>
       </div>
 
@@ -62,7 +89,7 @@ const AddNote = ({ handleAddNote, existingCategories = [] }) => {
             value={noteContent}
             onChange={setNoteContent}
             placeholder="Write your note here..."
-            className=" h-full md:h-64 "
+            className="h-full md:h-64"
           />
         </div>
 

@@ -116,7 +116,7 @@ const App = () => {
     <div
       className={`${
         darkMode ? "bg-gray-800 text-white" : "bg-gray-300 text-gray-800"
-      } min-h-screen`}
+      } min-h-screen max-w-[99%] flex justify-center items-center flex-col`}
     >
       <div className="container mx-auto p-4">
         <Header handleToggleDarkMode={setDarkMode} />
